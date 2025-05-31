@@ -41,9 +41,6 @@ function AuthForm({ type }: { type: FormType }) {
     // 2. Define a submit handler.
     async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
-            // Do something with the form values.
-            // ✅ This will be type-safe and validated.
-            console.log(values);
 
             if (type === "sign-up") {
                 console.log("SIGN UP");
@@ -80,8 +77,6 @@ function AuthForm({ type }: { type: FormType }) {
                     email,
                     password
                 );
-
-                console.log(userCredential)
 
                 const idToken = await userCredential.user.getIdToken();
 

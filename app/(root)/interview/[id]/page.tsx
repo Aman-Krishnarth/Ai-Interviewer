@@ -13,6 +13,9 @@ async function page({ params }: RouteParams) {
 
     const interview = await getInterviewById(id);
 
+    console.log("interview = ", interview)
+    console.log("id = ", id)
+
     if (!interview || !id) {
         redirect("/");
     }
@@ -45,6 +48,7 @@ async function page({ params }: RouteParams) {
                 userId={user?.id}
                 type="interview"
                 questions={interview.questions}
+                interviewId={id}
             />
         </>
     );

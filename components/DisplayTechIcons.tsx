@@ -6,18 +6,12 @@ async function DisplayTechIcons({techStack}: TechIconProps) {
 
   const techIcons = await getTechLogos(techStack);
 
-  console.log(techIcons)
-
   return (
-    
     <div className='flex flex-row gap-1'>
-
       {
         techIcons.slice(0,3).map(({tech,url},index)=>(
           <div key={tech} className='relative group bg-dark-300 rounded-full p-2 flex-center'>
-
             <span className='tech-tooltip'>{tech}</span>
-
             <Image
             src={url}
             alt={tech}
@@ -25,14 +19,10 @@ async function DisplayTechIcons({techStack}: TechIconProps) {
             height={100}
             className='size-5'
             />
-
           </div>
         ))
       }
-
-
     </div>
-
   )
 }
 
