@@ -4,8 +4,10 @@ import { Button } from "./ui/button";
 import Link from "next/link";
 import { getRandomInterviewCover } from "@/lib/utils";
 import DisplayTechIcons from "./DisplayTechIcons";
+import { getFeedbackByInterviewId } from "@/lib/actions/general.action";
+import ExpandableText from "./ui/ExpandableText";
 
-function InterviewCard({
+async function InterviewCard({
     id,
     userId,
     role,
@@ -13,7 +15,13 @@ function InterviewCard({
     techstack,
     createdAt,
 }: InterviewCardProps) {
-    const feedback = null as Feedback | null;
+    const feedback =
+        userId && id
+            ? await getFeedbackByInterviewId({
+                  interviewId: id,
+                  userId,
+              })
+            : null;
 
     const normalizedType = /mix/gi.test(type) ? "Mixed" : type;
 
@@ -61,15 +69,17 @@ function InterviewCard({
                         </div>
                     </div>
 
-                    <p className="line-clamp-2 mt-5">
-                        {feedback?.finalAssessment ||
-                            "You havne't taken the interview yet. Take it now to improve your skills."}
+                    <p className="mt-5">
+                        {feedback?.finalAssessment ? (
+                            <ExpandableText text={feedback.finalAssessment} />
+                        ) : (
+                            "You haven't taken the interview yet. Take it now to improve your skills."
+                        )}
                     </p>
                 </div>
 
                 <div className="flex flex-row justify-between">
-                    
-					<DisplayTechIcons techStack={techstack} />
+                    <DisplayTechIcons techStack={techstack} />
 
                     <Button className="btn-primary">
                         <Link
