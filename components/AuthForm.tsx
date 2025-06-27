@@ -16,6 +16,7 @@ import {
 } from "firebase/auth";
 import { auth } from "@/firebase/client";
 import { signIn, signUp } from "@/lib/actions/auth.action";
+import { useState } from "react";
 
 const authFormSchema = (type: FormType) => {
     return z.object({
@@ -28,6 +29,7 @@ const authFormSchema = (type: FormType) => {
 function AuthForm({ type }: { type: FormType }) {
     const formSchema = authFormSchema(type);
     const router = useRouter();
+    const [isLoading, setIsLoading] = useState(false);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -41,7 +43,7 @@ function AuthForm({ type }: { type: FormType }) {
     // 2. Define a submit handler.
     async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
-
+            setIsLoading(true);
             if (type === "sign-up") {
                 console.log("SIGN UP");
 
@@ -94,8 +96,11 @@ function AuthForm({ type }: { type: FormType }) {
                 router.push("/");
             }
         } catch (error) {
+            setIsLoading(false);
             console.log(error);
             toast.error("something went wrong");
+        } finally {
+            setIsLoading(false);
         }
     }
 
@@ -139,8 +144,21 @@ function AuthForm({ type }: { type: FormType }) {
                             type="password"
                         />
 
-                        <Button className="btn" type="submit">
-                            {isSignIn ? "Sign in" : "Create an account"}
+                        <Button
+                            className="btn"
+                            type="submit"
+                            disabled={isLoading}
+                        >
+                            {isLoading ? (
+                                <>
+                                    <span className="inline-block w-4 h-4 mr-2 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                    Loading...
+                                </>
+                            ) : isSignIn ? (
+                                "Sign in"
+                            ) : (
+                                "Create an account"
+                            )}
                         </Button>
                     </form>
                 </Form>

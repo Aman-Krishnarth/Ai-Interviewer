@@ -36,6 +36,7 @@ function FormField<T extends FieldValues>({
                             placeholder={placeholder}
                             {...field}
                             type={type}
+                            required
                         />
                     </FormControl>
                     <FormMessage />
